@@ -1,0 +1,152 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+div,
+span,
+h1,
+h2 {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+footer,
+header,
+nav,
+section {
+  display: block;
+}
+
+ul {
+  list-style: none;
+}
+
+textarea {
+  resize: none;
+  width: 100%;
+  border-radius: 4px;
+  margin-bottom: 12px;
+  padding: 4px;
+}
+
+body {
+  min-height: 100vh;
+  background-color: #222831;
+  color: #eeeeee;
+}
+
+button {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #393e46;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  background-color: #393e46;
+  position: fixed;
+  width: 100%;
+  padding: 4px 2px;
+}
+
+.logo {
+  width: 36px;
+  margin: 8px;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.main {
+  display: flex;
+  padding: 72px 12px;
+}
+
+.lists {
+  display: flex;
+}
+
+.list {
+  border: 1px dashed #ffd369;
+  width: 280px;
+  margin: 0 12px 12px 12px;
+  height: fit-content;
+  padding: 12px;
+  border-radius: 4px;
+}
+
+.add-list-form,
+.add-card-form {
+  border: 1px dashed #ffd369;
+  min-width: 240px;
+  height: fit-content;
+  border-radius: 4px;
+  padding: 12px;
+}
+
+.add-more-list {
+  border: 1px solid salmon;
+
+  min-width: 240px;
+  height: fit-content;
+  padding: 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 0 12px;
+}
+
+.list-title {
+  font-size: 1.4rem;
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+
+.card {
+  border: 1px solid salmon;
+  font-size: 1rem;
+  margin: 12px 0;
+  padding: 12px 4px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.add-card {
+  border: 1px solid #eeeeee;
+  padding: 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.add-card-button {
+  border: 1px solid skyblue;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.clost-button {
+  width: 24px;
+  font-weight: 700;
+}
+
+.card:hover,
+.add-card:hover,
+.add-card:hover,
+.add-more-list:hover {
+  background-color: #393e46;
+}
