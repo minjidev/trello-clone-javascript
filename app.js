@@ -49,7 +49,7 @@ export default class App extends Component {
         this.state.lists.map(
           ({ listId, listTitle, cards, isOpen , isEditing}) =>
             `<section class="list" id=${listId}>
-                ${isEditing ? `<textarea class="editing">${listTitle}</textarea>` : `<div class="list-title">${listTitle}</div>`}
+                ${isEditing ? `<textarea class="editing" rows=1>${listTitle}</textarea>` : `<div class="list-title">${listTitle}</div>`}
                 <div class="cards">
             ${cards?.map(
                 ({ cardTitle }) =>
