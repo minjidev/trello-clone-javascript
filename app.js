@@ -12,8 +12,8 @@ export default class App extends Component {
             { cardId: 0, cardTitle: 'React', cardDesc: 'This is card desc 1' },
             { cardId: 1, cardTitle: 'TypeScript', cardDesc: 'This is card desc 2' },
           ],
-          isOpen: true,
-          isEditing: true,
+          isOpen: false,
+          isEditing: false,
         },
         {
           listId: 1,
@@ -28,6 +28,7 @@ export default class App extends Component {
         },
       ],
       isOpen: true,
+      elementToFocus: { type: '', listId: '' },
     };
     localStorage.setItem('TRELLO_LISTS', JSON.stringify(data));
     const list = JSON.parse(localStorage.getItem('TRELLO_LISTS')) ?? [];
@@ -81,15 +82,16 @@ export default class App extends Component {
   setEvent() {
     const toggleList = () => {
       const { isOpen } = this.state;
-      this.setState({ ...this.state, isOpen: !isOpen });
+      this.setState({ ...this.state, isOpen: !isOpen, elementToFocus: { type: 'list' } });
     };
 
     const toggleCard = (target, isOpen) => {
       const { lists } = this.state;
-      const selectedId = target.closest('.list').id;
+      const { id } = target.closest('.list');
 
       this.setState({
-        lists: lists.map(list => (list.listId === +selectedId ? { ...list, isOpen } : list)),
+        lists: lists.map(list => (list.listId === +id ? { ...list, isOpen } : list)),
+        elementToFocus: { type: 'card', listId: id },
       });
     };
 
@@ -108,8 +110,7 @@ export default class App extends Component {
       if (listTitle.trim()) {
         $textarea.textContent = '';
         const newList = { listId: generateNewListId(), listTitle, cards: [] };
-        this.setState({ lists: [...this.state.lists, newList] });
-        $textarea.focus();
+        this.setState({ lists: [...this.state.lists, newList], elementToFocus: { type: 'list' } });
       }
     };
 
@@ -119,12 +120,14 @@ export default class App extends Component {
 
       if (cardTitle.trim()) {
         const { id } = e.target.closest('.list');
+
         const newCard = { cardId: generateNewCardId(+id), cardTitle, cardDesc: '' };
 
         this.setState({
           lists: this.state.lists.map(list =>
             list.listId === +id ? { ...list, cards: [...list.cards, newCard] } : list
           ),
+          elementToFocus: { type: 'card', listId: id },
         });
       }
     };
@@ -143,9 +146,7 @@ export default class App extends Component {
       toggleCard(target, false);
     });
 
-    // textarae value 추가
     this.addEvent('input', '.list-textarea', ({ target }) => {
-      // target.value = target.textContent;
       target.textContent = target.value;
     });
 
@@ -173,8 +174,14 @@ export default class App extends Component {
     this.addEvent('click', '.list-title', e => {
       const { id } = e.target.closest('.list');
 
+      // 포커스 주기
+      // const { listTitle } = this.state.lists.find(list => list.listId === +id);
+      // const end = listTitle.length;
+      // e.target.setSelectionRange(end, end);
+
       this.setState({
         lists: this.state.lists.map(list => (list.listId === +id ? { ...list, isEditing: true } : list)),
+        elementToFocus: { type: 'editing', listId: id },
       });
     });
 
@@ -184,10 +191,7 @@ export default class App extends Component {
 
       const { id } = e.target.closest('.list');
       const edited = e.target.value;
-      const end = edited.length;
 
-      e.target.setSelectionRange(end, end);
-      e.target.focus(); // 끝에 포커스 주기
       const { listTitle } = this.state.lists.find(list => list.listId === +id);
 
       this.setState({
@@ -200,5 +204,22 @@ export default class App extends Component {
         ),
       });
     });
+  }
+
+  mounted() {
+    if (!this.state.elementToFocus) return;
+    const { type } = this.state.elementToFocus;
+
+    if (type === 'card')
+      this.$target.querySelector(`.list[id="${this.state.elementToFocus.listId}"] .card-textarea`)?.focus();
+    if (type === 'list') this.$target.querySelector('.list-textarea')?.focus();
+    if (type === 'editing') {
+      const $editing = this.$target.querySelector(`.list[id="${this.state.elementToFocus.listId}"] > .editing`);
+      if (!$editing) return;
+
+      const end = $editing.value.length;
+      $editing.setSelectionRange(end, end);
+      $editing.focus();
+    }
   }
 }
